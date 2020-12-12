@@ -53,7 +53,7 @@
                   <tr>
                         <td>{{ $product->id }}</td>
                         <td>{{ $product->name }}</td>
-                        <td>{{ $product->image }}</td>
+                        <td><img src="{{ asset('images/'.$product->image) }}" alt="" width="100"></td>
                         <td>{{ $product->starter_price }}</td>
                         <td>{{ $product->ending_date }}</td>
                         <td>

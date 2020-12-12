@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -33,12 +34,24 @@ class ProductController extends Controller
 
     public function productOfferStart()
     {
-        return view('admin.last-prices.starting-offer');
+        $offers = DB::table('offers')
+                ->join('products', 'products.id', '=', 'offers.product_id')
+                ->join('users', 'users.id', '=', 'offers.user_id')
+                ->select('users.name as userName', 'offers.*', 'products.*')
+                ->orderBy('last_offer_time', 'DESC')
+                ->get();
+        return view('admin.last-prices.starting-offer',  ['offers' => $offers]);
     }
 
     public function productOfferEnd()
     {
-        return view('admin.last-prices.ending-offer');
+        $offers = DB::table('offers')
+                ->join('products', 'products.id', '=', 'offers.product_id')
+                ->join('users', 'users.id', '=', 'offers.user_id')
+                ->select('users.name as userName', 'users.*', 'offers.*', 'products.*')
+                ->orderBy('last_offer_time', 'DESC')
+                ->get();
+        return view('admin.last-prices.ended-offer', ['offers' => $offers]);
     }
 
     /**
@@ -59,10 +72,22 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
-        $createProduct = Product::create($request->except('_token'));
-        $createProduct['ending_date'] = Carbon::parse($createProduct['ending_date'])->format('Y-m-d H:i:s');
+        $request->validate([
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
 
+        $uploaded_file =$request->file()['image']->getClientOriginalName();
+        $file_name = time().$uploaded_file;
+        $request->image->move(public_path('images'), $file_name);
+        $datas = [
+            'name' => $request->input('name'),
+            'image' => $file_name,
+            'starter_price' => $request->input('starter_price'),
+            'ending_date' => $request->input('ending_date')
+        ];
+        $createProduct = Product::create($datas);
+
+        $createProduct['ending_date'] = Carbon::parse($createProduct['ending_date'])->format('Y-m-d H:i:s');
         return $this->createData($createProduct, 'Product');
     }
 
@@ -104,15 +129,17 @@ class ProductController extends Controller
         unlink(public_path('images/'.$data->image));
 
         $uploaded_file =$request->file()['image']->getClientOriginalName();
+
         $file_name = time().$uploaded_file;
+
         $request->image->move(public_path('images'), $file_name);
+
         $datas = [
             'name' => $request->input('name'),
             'image' => $file_name,
             'starter_price' => $request->input('starter_price'),
             'ending_date' => $request->input('ending_date')
         ];
-        // dd($data);
         $updateData = Product::where('id', $id)->update($datas);
 
         return $this->updateData($updateData, 'Product');

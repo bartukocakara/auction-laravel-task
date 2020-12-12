@@ -18,8 +18,8 @@ class CreateOffersTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('product_id');
-            $table->decimal('credit', 15, 2);
-            $table->enum('is_blocked', ['ACTIVE', 'PASSIVE']);
+            $table->decimal('amount', 15, 2);
+            $table->enum('is_blocked', ['NO', 'YES']);
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
             $table->dateTime('last_offer_time')->default(DB::raw('CURRENT_TIMESTAMP'));

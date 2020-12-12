@@ -49,7 +49,7 @@
               <li class="nav-item">
                 <a href="{{ route('offer.end') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Offers - About the end</p>
+                  <p>Offers - Ended</p>
                 </a>
               </li>
             </ul>

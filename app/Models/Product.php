@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Offer;
 
 class Product extends Model
 {
@@ -15,4 +16,8 @@ class Product extends Model
 
     public $timestamps = false;
 
+    public function offer()
+    {
+        return $this->hasMany(Offer::class, 'foreign_key');
+    }
 }

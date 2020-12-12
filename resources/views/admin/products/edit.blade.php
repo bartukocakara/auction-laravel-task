@@ -31,7 +31,7 @@
             @endif
             <!-- /.card-header -->
             <!-- form start -->
-            <form action="{{ route('products.update', $product->id) }}" method="post" role="form">
+            <form action="{{ route('products.update', $product->id) }}" method="post" role="form" enctype="multipart/form-data">
                 @csrf
                 <div class="card-body">
                     <div class="form-group">

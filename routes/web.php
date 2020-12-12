@@ -16,9 +16,9 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
-Route::get('', 'Admin\HomeController@userMain')->name('user.main');
-Route::get('user-offer-page', 'Admin\HomeController@userOfferPage')->name('user.offer');
-Route::post('user-offer-page', 'Admin\HomeController@userOfferSubmit')->name('user.offer.submit');
+Route::get('', 'Admin\OfferController@userMain')->name('user.main');
+Route::get('user-offer-page/{id}', 'Admin\OfferController@userOfferPage')->name('user.offer');
+Route::post('user-offer-page/{id}', 'Admin\OfferController@userOfferSubmit')->name('user.offer.submit');
 
 Route::get('home', 'HomeController@index')->name('home');
 
@@ -26,8 +26,5 @@ Route::get('home', 'HomeController@index')->name('home');
 Route::namespace('Admin')->group(function () {
     Route::resource('products', 'ProductController')->except('show');
     Route::get('products-offers-start', 'ProductController@productOfferStart')->name('offer.start');
-    Route::get('products-offers-end', 'ProductController@productOfferEnd')->name('offer.end');
+    Route::get('products-offers-ended', 'ProductController@productOfferEnd')->name('offer.end');
 });
-
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
