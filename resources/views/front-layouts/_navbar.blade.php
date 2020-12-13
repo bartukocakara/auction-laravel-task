@@ -3,7 +3,10 @@
     <nav class="navbar navbar-default">
        <div class="container-fluid">
           <div class="row">
-             <div class="col-md-4 col-sm-12 left-rs">
+            <div class="col-md-4 col-sm-12 left-rs">
+                <div class="navbar-header">
+                   <a href="{{ route('user.main') }}" class="navbar-brand"><h2>Auction</h2></a>
+                </div>
              </div>
              <div class="col-md-8 col-sm-12">
                 <div class="right-nav">

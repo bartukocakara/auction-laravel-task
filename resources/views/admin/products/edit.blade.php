@@ -33,6 +33,7 @@
             <!-- form start -->
             <form action="{{ route('products.update', $product->id) }}" method="post" role="form" enctype="multipart/form-data">
                 @csrf
+                @method('PUT')
                 <div class="card-body">
                     <div class="form-group">
                         <label for="name">Product Name</label>

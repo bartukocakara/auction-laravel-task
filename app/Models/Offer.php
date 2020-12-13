@@ -13,7 +13,7 @@ class Offer extends Model
 
     protected $table = 'offers';
 
-    protected $fillable = ['user_id', 'product_id', 'credit', 'is_blocked'];
+    protected $fillable = ['user_id', 'product_id', 'amount', 'is_blocked'];
 
     public $timestamps = false;
 

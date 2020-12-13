@@ -4,7 +4,7 @@
 
         @foreach ($products as $product)
         <div class="col-lg-3 col-sm-6 col-md-3">
-            <a href="productpage.html">
+            <a href="">
                <div class="box-img">
                     <h4>{{ $product->name }}</h4>
                     <img src="{{ asset('images/'.$product->image) }}" alt="">

@@ -10,37 +10,52 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    public function firstOffer($count, Request $request)
+    public function firstOfferCreate(Request $request)
     {
-        if($count)
-        {
-            Offer::create($request->except('_token'))->first();
-        }
+        return Offer::create($request->except('_token'))->first();
+
     }
 
-    public function changeStatusAfterUsersOffer($countUser)
+    public function changeStatusAfterUsersOffer()
     {
-        if($countUser)
-        {
-            User::where('id', Auth::user()->id)->update(['is_blocked' => 'YES']);
-        }
+        return Offer::where('user_id', Auth::user()->id)->update(['is_blocked' => 'YES']);
     }
 
-    public function changeStatusAfterOtherUsersOffer($countOtherUser)
+
+    public function changeStatusAfterOtherUsersOffer($productId)
     {
-        if($countOtherUser)
-        {
-            User::where('id', Auth::user()->id)->update(['is_blocked' => 'NO']);
-        }
+        return Offer::where(['is_blocked' => 'YES','product_id' => $productId])->update(['is_blocked' => 'NO']);
     }
 
-    public function xxx($productId)
+    public function getGeneralData($product)
     {
+        return  Offer::where('product_id', $product->id)
+                ->join('products', 'products.id', '=', 'offers.product_id')
+                ->join('users', 'users.id', '=', 'offers.user_id')
+                ->select('users.name as userName', 'offers.*', 'products.*')
+                ->orderBy('amount', 'DESC')
+                ->get();
+    }
+
+    public function getMaxPrice($productId)
+    {
+        return  Offer::where('product_id', $productId)->max('amount');
+    }
+
+    public function decreaseUsersCredit($credit ,$amount)
+    {
+        return User::where('id', Auth::user()->id)
+                    ->update(
+                            [
+                                'user_credit' => $credit - $amount,
+                                'last_paid_credit' => $amount
+                            ]);
     }
 
 
