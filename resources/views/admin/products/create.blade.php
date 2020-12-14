@@ -36,19 +36,19 @@
                 <div class="card-body">
                     <div class="form-group">
                         <label for="name">Product Name</label>
-                        <input type="text" class="form-control" name="name" value="{{ old('name') }}" placeholder="İsim giriniz...">
+                        <input type="text" class="form-control" name="name" value="{{ old('name') }}" placeholder="İsim giriniz..." required>
                     </div>
                     <div class="form-group">
                         <label for="name">Product Image</label>
-                        <input type="file" class="form-control" name="image" value="{{ old('image') }}">
+                        <input type="file" class="form-control" name="image" value="{{ old('image') }}" required>
                     </div>
                     <div class="form-group">
                         <label for="name">Starter Price</label>
-                        <input type="number" class="form-control" name="starter_price" value="{{ old('starter_price') }}">
+                        <input type="number" class="form-control" name="starter_price" value="{{ old('starter_price') }}" required>
                     </div>
                     <div class="form-group">
                         <label for="name">Ending Date</label>
-                        <input type="datetime-local" class="form-control" name="ending_date" value="{{ old('ending_date') }}">
+                        <input type="datetime-local" class="form-control" name="ending_date" value="{{ old('ending_date') }}" required>
                     </div>
                 <div class="card-footer">
                 <button type="submit" class="btn btn-primary">Save</button>

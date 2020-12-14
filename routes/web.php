@@ -15,14 +15,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 Auth::routes();
+    Route::get('', 'Admin\OfferController@userMain')->name('user.main');
+    Route::get('about-to-start', 'Admin\OfferController@aboutToStart')->name('auction.start');
+    Route::get('user-offer-page/{id}', 'Admin\OfferController@userOfferPage')->name('user.offer');
+    Route::post('user-offer-page/{id}', 'Admin\OfferController@userOfferSubmit')->name('user.offer.submit');
 
-Route::get('', 'Admin\OfferController@userMain')->name('user.main');
-Route::get('user-offer-page/{id}', 'Admin\OfferController@userOfferPage')->name('user.offer');
-Route::post('user-offer-page/{id}', 'Admin\OfferController@userOfferSubmit')->name('user.offer.submit');
+    //Admin sayfasına girebilmek için user status ADMIN olmalı default USER olarak üyelik başlıyor.
+Route::namespace('Admin')->middleware('admin')->group(function () {
 
-
-
-Route::namespace('Admin')->group(function () {
     Route::get('home', 'HomeController@index')->name('home');
     Route::resource('products', 'ProductController')->except('show');
     Route::get('products-offers-start', 'ProductController@productOfferStart')->name('offer.start');

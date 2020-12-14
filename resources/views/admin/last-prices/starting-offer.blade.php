@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Offers')
+@section('title', 'products')
 
 @section('navbar')
     @parent
@@ -19,8 +19,8 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Offers About to Start</h1>
-            {{-- <a href="{{ route('offers.create') }}" type="button" class="btn btn-success">Create New offer <span class="font-weight-bold">+</span></a> --}}
+            <h1>products About to Start</h1>
+            {{-- <a href="{{ route('products.create') }}" type="button" class="btn btn-success">Create New product <span class="font-weight-bold">+</span></a> --}}
           </div>
           @if(session('status'))
                 <div class="alert alert-success" role="alert">
@@ -45,20 +45,20 @@
                       <th>Product Name</th>
                       <th>Image</th>
                       <th>Starter Price</th>
-                      <th>Last Offer Time</th>
+                      <th>Starting Date</th>
                       <th>Ending Date</th>
                     </tr>
                     </thead>
                     <tbody>
-                      @foreach($offers as $offer)
+                      @foreach($products as $product)
                     <tr>
-                          <td>{{ $offer->id }}</td>
-                          <td>{{ $offer->userName }}</td>
-                          <td>{{ $offer->name }}</td>
-                          <td><img src="{{ asset('images/'.$offer->image) }}" width="50" alt=""></td>
-                          <td>{{ $offer->starter_price }} ₺</td>
-                          <td>{{ $offer->last_offer_time }}</td>
-                          <td>{{ $offer->ending_date }}</td>
+                          <td>{{ $product->id }}</td>
+                          <td>{{ $product->userName }}</td>
+                          <td>{{ $product->name }}</td>
+                          <td><img src="{{ asset('images/'.$product->image) }}" width="50" alt=""></td>
+                          <td>{{ $product->starter_price }} ₺</td>
+                          <td>{{ $product->last_product_time }}</td>
+                          <td>{{ $product->ending_date }}</td>
                     </tr>
                     @endforeach
                     </tbody>

@@ -22,15 +22,16 @@ class Controller extends BaseController
 
     }
 
-    public function changeStatusAfterUsersOffer()
+    public function changeStatusAfterUsersOffer($productId)
     {
-        return Offer::where('user_id', Auth::user()->id)->update(['is_blocked' => 'YES']);
+        return Offer::where(['user_id' => Auth::user()->id, 'is_blocked' => 'NO', 'product_id' => $productId])->update(['is_blocked' => 'YES']);
     }
 
 
     public function changeStatusAfterOtherUsersOffer($productId)
     {
-        return Offer::where(['is_blocked' => 'YES','product_id' => $productId])->update(['is_blocked' => 'NO']);
+        return Offer::where(['is_blocked' => 'YES', 'product_id' => $productId])
+                                ->update(['is_blocked' => 'NO']);
     }
 
     public function getGeneralData($product)
@@ -48,14 +49,30 @@ class Controller extends BaseController
         return  Offer::where('product_id', $productId)->max('amount');
     }
 
+    public function getOffererBeforeLatest($productId)
+    {
+        return Offer::where('product_id', $productId)->latest('last_offer_time')->first();
+    }
+
     public function decreaseUsersCredit($credit ,$amount)
     {
         return User::where('id', Auth::user()->id)
                     ->update(
                             [
                                 'user_credit' => $credit - $amount,
-                                'last_paid_credit' => $amount
                             ]);
+    }
+
+    public function giveBackToUserAfterOtherUsersOffer($id)
+    {
+
+        return Offer::where([['user_id', '!=', Auth::user()->id,], ['product_id', '=', $id ]])
+                            ->join('users', 'users.id', '=', 'offers.user_id')
+                            ->select('users.*', 'offers.*')
+                            ->update(
+                                    [
+                                        'user_credit' => $this->getMaxPrice($id)
+                                    ]);
     }
 
 

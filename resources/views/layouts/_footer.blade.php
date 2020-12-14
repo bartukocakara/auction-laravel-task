@@ -1,7 +1,6 @@
 
 </div>
 <!-- ./wrapper -->
-
 <!-- jQuery -->
 <script src="{{ asset('admin-assets/plugins/jquery/jquery.min.js') }}"></script>
 <!-- jQuery UI 1.11.4 -->

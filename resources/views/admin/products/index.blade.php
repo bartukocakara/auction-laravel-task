@@ -44,6 +44,7 @@
                     <th>Name</th>
                     <th>Image</th>
                     <th>Starter Price</th>
+                    <th>Starting Date</th>
                     <th>Ending Date</th>
                     <th>Actions</th>
                   </tr>
@@ -55,6 +56,7 @@
                         <td>{{ $product->name }}</td>
                         <td><img src="{{ asset('images/'.$product->image) }}" alt="" width="100"></td>
                         <td>{{ $product->starter_price }}</td>
+                        <td>{{ $product->starting_date }}</td>
                         <td>{{ $product->ending_date }}</td>
                         <td>
                             <div class="btn-group">

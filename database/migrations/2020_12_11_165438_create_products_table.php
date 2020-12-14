@@ -18,7 +18,9 @@ class CreateProductsTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('image');
+            $table->string('winner')->default('null');
             $table->decimal('starter_price', 15, 2);
+            $table->dateTime('starting_date', 0)->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->dateTime('ending_date', 0);
         });
     }

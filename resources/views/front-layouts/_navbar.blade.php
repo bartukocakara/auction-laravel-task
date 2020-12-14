@@ -5,7 +5,8 @@
           <div class="row">
             <div class="col-md-4 col-sm-12 left-rs">
                 <div class="navbar-header">
-                   <a href="{{ route('user.main') }}" class="navbar-brand"><h2>Auction</h2></a>
+                    <a href="{{ route('user.main') }}" class="navbar-brand"><h2>Auction</h2></a>
+                    <a href="{{ route('auction.start') }}" class="navbar-brand"><h4>Auctions About to Start</h4></a>
                 </div>
              </div>
              <div class="col-md-8 col-sm-12">

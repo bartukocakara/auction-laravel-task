@@ -16,6 +16,9 @@
                     <a class="btn btn-info" href="{{ URL::to('user-offer-page/' . $product->id) }}">
                         Offer Price
                     </a>
+                    <a class="btn btn-warning">
+                        {{ $product->starting_date }}
+                    </a>
                     @endif
                </div>
          </div>

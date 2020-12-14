@@ -28,25 +28,42 @@
                 </div>
                 <div class="description-box">
                     <div class="dex-a">
-                       <h4>Rules</h4>
-                       <p>You can only increase the offer or wait for other users
+                       <h3 style="color:red;border-bottom:1px solid red">Rules!</h3>
+                       <p>You can only increase the offer and wait for other users before yoo offer new one
                        </p>
                     </div>
                     <div class="spe-a">
-                       <h4>OFFERS</h4>
+                       <h3 style="color:blue; border-bottom:1px solid black">OFFERS</h3>
                        <ul>
-
+                            <li class="clearfix">
+                                <div class="col-md-3">
+                                    <p>User Name</p>
+                                </div>
+                                <div class="col-md-3">
+                                    <p>Offer Amount</p>
+                                </div>
+                                    <div class="col-md-3">
+                                    <p>Last Offer Time</p>
+                                </div>
+                                <div class="col-md-3">
+                                    <p>User Blocked YES/NO</p>
+                                </div>
+                            </li>
+                            <hr>
                            @foreach ($offers as $offer)
                            <li class="clearfix">
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                <h5>{{ $offer->userName }}</h5>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                <p>{{ $offer->amount }}</p>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <p>{{ $offer->last_offer_time }}</p>
-                             </div>
+                            </div>
+                            <div class="col-md-3">
+                                <p>{{ $offer->is_blocked }}</p>
+                            </div>
                             </li>
                            @endforeach
                        </ul>
@@ -72,12 +89,13 @@
                     <input type="hidden" class="form-control" name="product_id" value="{{ $product->id }}">
                     <input type="hidden" class="form-control" name="user_id" value="{{ Auth::user()->id }}">
                     <input type="number" class="form-control" name="amount" placeholder="00,00₺" required>
+                    <input type="hidden" class="form-control" name="is_blocked" value="YES" placeholder="00,00₺" required>
                     <br>
                     @if(session('status'))
                     <div class="alert alert-warning" role="alert">
                         {{ session('status')}}
                     </div>
-                    @elseif(session('success'))
+                    @elseif(session('status'))
                         {{ session('success')}}
                     @endif
 

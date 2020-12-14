@@ -20,7 +20,7 @@ class ProductController extends Controller
 
     public function __construct(Product $products)
     {
-        // $this->middleware('auth');
+        $this->middleware('auth');
         return $this->products = $products;
 
     }
@@ -34,24 +34,25 @@ class ProductController extends Controller
 
     public function productOfferStart()
     {
-        $offers = DB::table('offers')
-                ->join('products', 'products.id', '=', 'offers.product_id')
-                ->join('users', 'users.id', '=', 'offers.user_id')
-                ->select('users.name as userName', 'offers.*', 'products.*')
-                ->orderBy('last_offer_time', 'DESC')
-                ->get();
-        return view('admin.last-prices.starting-offer',  ['offers' => $offers]);
+        $products = Product::where('ending_date', '<', date('Y-m-d H:i:s'))
+                            ->join('offers', 'offers.product_id', '=', 'products.id')
+                            ->join('users', 'users.id', '=', 'offers.user_id')
+                            ->select('users.name as userName', 'users.*', 'offers.*', 'products.*')
+                            ->orderBy('last_offer_time', 'DESC')
+                            ->get();
+
+        return view('admin.last-prices.starting-offer',  ['products' => $products]);
     }
 
     public function productOfferEnd()
     {
-        $offers = DB::table('offers')
-                ->join('products', 'products.id', '=', 'offers.product_id')
+        $products = Product::where('ending_date', '>', date('Y-m-d H:i:s'))
+                ->join('offers', 'offers.product_id', '=', 'products.id')
                 ->join('users', 'users.id', '=', 'offers.user_id')
                 ->select('users.name as userName', 'users.*', 'offers.*', 'products.*')
                 ->orderBy('last_offer_time', 'DESC')
                 ->get();
-        return view('admin.last-prices.ended-offer', ['offers' => $offers]);
+        return view('admin.last-prices.ended-offer', ['products' => $products]);
     }
 
     /**
@@ -108,7 +109,6 @@ class ProductController extends Controller
     public function edit($id)
     {
         $product = Product::findOrFail($id);
-
         return view('admin.products.edit', ['product' => $product]);
     }
 
@@ -126,7 +126,7 @@ class ProductController extends Controller
         ]);
         $data = Product::where('id', $id)->first();
 
-        unlink(public_path('images/'.$data->image));
+        unlink(public_path('images\\'.$data->image));
 
         $uploaded_file =$request->file()['image']->getClientOriginalName();
 

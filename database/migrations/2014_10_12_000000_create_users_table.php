@@ -18,8 +18,7 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->enum('status', ['ADMIN', 'USER']);
-            $table->decimal('user_credit', 15, 2)->default(0);
-            $table->decimal('last_paid_credit', 15, 2)->default(0);
+            $table->decimal('user_credit', 15, 2)->default(1000000);
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
