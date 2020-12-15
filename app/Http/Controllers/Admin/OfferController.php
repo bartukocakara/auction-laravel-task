@@ -32,6 +32,7 @@ class OfferController extends Controller
         $offers = $this->getGeneralData($product);
         $maxOffer = $this->getMaxPrice($id);
         $product = Product::where('id', $id)->first();
+        // dd($maxOffer);
         if($product->ending_date < date('Y-m-d H:i:s'))
         {
             return redirect()->back();
@@ -63,7 +64,7 @@ class OfferController extends Controller
             //Kullanıcının teklifi kadar kredisinden düş
             $this->decreaseUsersCredit($user->user_credit, $request->input('amount'));
             // Başka kullanıcı ürün için teklif yaptıktan sonra bloke kaldır önceki teklif miktarı kadar geri ver
-            // $this->giveBackToUserAfterOtherUsersOffer($user->user_credit, $user->last_paid_credit, $id);
+            $this->giveBackToUserAfterOtherUsersOffer($id);
             // Kullanıcı ürün için teklif yaptıktan sonra kullanıcı is_blocked yes yap diğerlerini no yap
             $this->firstOfferCreate($request);
             $this->changeStatusAfterOtherUsersOffer($id);
@@ -88,9 +89,9 @@ class OfferController extends Controller
                 return redirect()->back()->with(['status' => 'You can\'t offer new price.Because deadline is over']);
 
             }
-            Offer::create($createOffer);
+            $this->giveBackToUserAfterOtherUsersOffer($id);
             $this->decreaseUsersCredit($user->user_credit, $request->input('amount'));
-            // $this->giveBackToUserAfterOtherUsersOffer($user->user_credit, $user->last_paid_credit, $id);
+            Offer::create($createOffer);
             $this->changeStatusAfterOtherUsersOffer($product->id);
             $this->changeStatusAfterUsersOffer($product->id);
             return view('front.user-offers.offer-page', ['product' => $product,

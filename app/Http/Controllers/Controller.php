@@ -49,6 +49,21 @@ class Controller extends BaseController
         return  Offer::where('product_id', $productId)->max('amount');
     }
 
+    public function getMaxOfferRow($productId)
+    {
+        if($this->getMaxPrice($productId) != null)
+        {
+            return Offer::where(['amount' => $this->getMaxPrice($productId), 'product_id' => $productId])
+                            ->join('users', 'users.id', '=', 'offers.user_id')
+                            ->select('users.*', 'offers.*')
+                            ->first();
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
     public function getOffererBeforeLatest($productId)
     {
         return Offer::where('product_id', $productId)->latest('last_offer_time')->first();
@@ -66,12 +81,12 @@ class Controller extends BaseController
     public function giveBackToUserAfterOtherUsersOffer($id)
     {
 
-        return Offer::where([['user_id', '!=', Auth::user()->id,], ['product_id', '=', $id ]])
+        return Offer::where(['amount' => $this->getMaxPrice($id), 'product_id' => $id])
                             ->join('users', 'users.id', '=', 'offers.user_id')
                             ->select('users.*', 'offers.*')
                             ->update(
                                     [
-                                        'user_credit' => $this->getMaxPrice($id)
+                                        'user_credit' => $this->getMaxOfferRow($id)->user_credit + $this->getMaxPrice($id)
                                     ]);
     }
 

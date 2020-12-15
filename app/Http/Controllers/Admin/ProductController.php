@@ -20,7 +20,6 @@ class ProductController extends Controller
 
     public function __construct(Product $products)
     {
-        $this->middleware('auth');
         return $this->products = $products;
 
     }
@@ -38,7 +37,7 @@ class ProductController extends Controller
                             ->join('offers', 'offers.product_id', '=', 'products.id')
                             ->join('users', 'users.id', '=', 'offers.user_id')
                             ->select('users.name as userName', 'users.*', 'offers.*', 'products.*')
-                            ->orderBy('last_offer_time', 'DESC')
+                            ->orderBy('last_offer_time', 'ASC')
                             ->get();
 
         return view('admin.last-prices.starting-offer',  ['products' => $products]);
@@ -153,9 +152,9 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        $deleteProduct = Product::find($id);
+        $deleteProduct = Product::findOrFail($id);
 
-        if(file_exists($deleteProduct->image))
+        if(file_exists(public_path('images\\'.$deleteProduct->image)))
         {
             unlink(public_path('images\\'.$deleteProduct->image));
         }
