@@ -34,9 +34,7 @@ class ProductController extends Controller
     public function productOfferStart()
     {
         $products = Product::where('ending_date', '<', date('Y-m-d H:i:s'))
-                            ->join('offers', 'offers.product_id', '=', 'products.id')
-                            ->join('users', 'users.id', '=', 'offers.user_id')
-                            ->select('users.name as userName', 'users.*', 'offers.*', 'products.*')
+                            ->with('offers', 'users')
                             ->orderBy('last_offer_time', 'ASC')
                             ->get();
 
@@ -46,12 +44,9 @@ class ProductController extends Controller
     public function productOfferEnd()
     {
         $products = Product::where('ending_date', '>', date('Y-m-d H:i:s'))
-
-                ->join('offers', 'offers.product_id', '=', 'products.id')
-                ->join('users', 'users.id', '=', 'offers.user_id')
-                ->select('users.name as userName', 'users.*', 'offers.*', 'products.*')
-                ->orderBy('last_offer_time', 'DESC')
-                ->get();
+                            ->with('offers', 'users')
+                            ->orderBy('last_offer_time', 'DESC')
+                            ->get();
         return view('admin.last-prices.ended-offer', ['products' => $products]);
     }
 

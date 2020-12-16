@@ -31,7 +31,6 @@ class OfferController extends Controller
         $offers = $this->getGeneralData($product);
         $maxOffer = $this->getMaxPrice($id);
         $product = Product::where('id', $id)->first();
-        // dd($maxOffer);
         if($product->ending_date < date('Y-m-d H:i:s'))
         {
             return redirect()->back();
@@ -49,7 +48,6 @@ class OfferController extends Controller
         $user = User::where('id', Auth::user()->id)->first();
         $product = Product::findOrFail($id);
         $offer = Offer::where(['product_id' => $id, 'user_id' => $user->id])->first();
-        $offers = $this->getGeneralData($product);
         $maxOffer = $this->getMaxPrice($id);
 
         // Kredisinin üstünde teklif vermesini engelle
@@ -68,13 +66,8 @@ class OfferController extends Controller
             $this->firstOfferCreate($request);
             $this->changeStatusAfterOtherUsersOffer($id);
             // Diğer Kullanıcı teklif sunduktan sonra o kullanıcıdan bir öncekinin teklifi kadar kredi blokajını kaldır.Kredisini iade et
-
             $this->changeStatusAfterUsersOffer($id);
-            return view('front.user-offers.offer-page', ['product' => $product,
-                                                         'offers' => $offers,
-                                                         'maxOffer' => $maxOffer,
-                                                         'success' => 'Offer created successfully'
-                                                         ]);
+            return redirect()->back()->with('status', 'Offer successfully send');
         }
 
         else if($offer->is_blocked === 'YES')
@@ -92,11 +85,8 @@ class OfferController extends Controller
             Offer::create($createOffer);
             $this->changeStatusAfterOtherUsersOffer($product->id);
             $this->changeStatusAfterUsersOffer($product->id);
-            return view('front.user-offers.offer-page', ['product' => $product,
-                                                         'offers' => $offers,
-                                                         'maxOffer' => $maxOffer,
-                                                         'success' => 'Offer created successfully'
-                                                         ]);
+            return redirect()->back()->with('status', 'Offer successfully send');
+
         }
         // $this->checkUsersStatusBeforeOffering($id, $offer->is_blocked, $product, $createOffer, $user, $offers, $maxOffer, $request);
 

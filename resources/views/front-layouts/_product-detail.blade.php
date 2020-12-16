@@ -95,8 +95,6 @@
                     <div class="alert alert-warning" role="alert">
                         {{ session('status')}}
                     </div>
-                    @elseif(session('status'))
-                        {{ session('success')}}
                     @endif
 
                     <button type="submit" class="btn btn-info p-10">Offer Price</button>

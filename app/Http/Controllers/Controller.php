@@ -82,6 +82,7 @@ class Controller extends BaseController
                                                          ]);
         }
     }
+
     public function getGeneralData($product)
     {
         return Offer::where('product_id', $product->id)->with('products', 'users')
