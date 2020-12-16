@@ -53,7 +53,7 @@
                            @foreach ($offers as $offer)
                            <li class="clearfix">
                             <div class="col-md-3">
-                               <h5>{{ $offer->userName }}</h5>
+                               <h5>{{ $offer->users->name }}</h5>
                             </div>
                             <div class="col-md-3">
                                <p>{{ $offer->amount }}</p>
@@ -79,7 +79,7 @@
                 @if (isset($maxOffer))
                         <h3>{{ $maxOffer }}</h3>
                 @else
-                    <h3>{{ $product->starter_price }} ₺</h3>
+                        <h3>{{ $product->starter_price }} ₺</h3>
                 @endif
             </div>
                 </div>

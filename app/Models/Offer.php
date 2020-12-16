@@ -13,17 +13,20 @@ class Offer extends Model
 
     protected $table = 'offers';
 
+    protected $guarded = [];
+
     protected $fillable = ['user_id', 'product_id', 'amount', 'is_blocked'];
 
     public $timestamps = false;
 
-    public function product()
+    public function products()
     {
-        return $this->belongsTo(Product::class, 'product_id');
+        return $this->belongsTo(Product::class, 'product_id', 'id');
     }
 
-    public function user()
+    public function users()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
+
 }

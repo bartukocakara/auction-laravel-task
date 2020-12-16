@@ -12,12 +12,16 @@ class Product extends Model
 
     protected $table = 'products';
 
+    protected $guarded = [];
+
     protected $fillable = ['name', 'image', 'starter_price', 'ending_date'];
 
     public $timestamps = false;
 
-    public function offer()
+    public function offers()
     {
-        return $this->hasMany(Offer::class, 'foreign_key');
+        return $this->hasMany(Offer::class);
     }
+
+
 }

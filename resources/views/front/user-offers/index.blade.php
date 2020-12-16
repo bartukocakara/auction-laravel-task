@@ -1,6 +1,6 @@
 @extends('front-layouts.app')
 
-@section('title', 'Teklif Sayfası')
+@section('title', 'Home Page')
 
 
 @section('navbar')

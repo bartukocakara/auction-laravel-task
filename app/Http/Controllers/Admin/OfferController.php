@@ -27,7 +27,6 @@ class OfferController extends Controller
 
     public function userOfferPage($id)
     {
-        // dd($this->getOffererBeforeLatest($id));
         $product = Product::findOrFail($id);
         $offers = $this->getGeneralData($product);
         $maxOffer = $this->getMaxPrice($id);
@@ -54,7 +53,7 @@ class OfferController extends Controller
         $maxOffer = $this->getMaxPrice($id);
 
         // Kredisinin üstünde teklif vermesini engelle
-        if($user->user_credit < $request->input('amount') || $request->input('amount') < $product->starter_price)
+        if($user->user_credit < $request->input('amount') || $request->input('amount') < $product->starter_price || $request->input('amount') < $maxOffer)
         {
             return redirect()->back()->with(['status' => 'You don\'t have enough credit.']);
         }
@@ -78,16 +77,15 @@ class OfferController extends Controller
                                                          ]);
         }
 
-        if($offer->is_blocked == 'YES')
+        else if($offer->is_blocked === 'YES')
         {
-            return redirect()->back()->with(['status' => 'For offering price please wait for other offers.']);
+                return redirect()->back()->with(['status' => 'For offering price please wait for other offers.']);
         }
         else if($offer->is_blocked == 'NO')
         {
             if($product->ending_date < date('Y-m-d H:i:s'))
             {
                 return redirect()->back()->with(['status' => 'You can\'t offer new price.Because deadline is over']);
-
             }
             $this->giveBackToUserAfterOtherUsersOffer($id);
             $this->decreaseUsersCredit($user->user_credit, $request->input('amount'));
@@ -100,5 +98,7 @@ class OfferController extends Controller
                                                          'success' => 'Offer created successfully'
                                                          ]);
         }
+        // $this->checkUsersStatusBeforeOffering($id, $offer->is_blocked, $product, $createOffer, $user, $offers, $maxOffer, $request);
+
     }
 }

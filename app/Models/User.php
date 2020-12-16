@@ -45,8 +45,8 @@ class User extends Authenticatable
     protected $appends = ['status'];
 
 
-    public function offer()
+    public function offers()
     {
-        return $this->hasMany(Offer::class, 'id');
+        return $this->hasMany(Offer::class, 'user_id', 'id');
     }
 }

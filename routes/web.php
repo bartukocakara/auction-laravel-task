@@ -15,16 +15,16 @@ use Illuminate\Support\Facades\Route;
 */
 
 Auth::routes();
-Route::group(['middleware' => 'auth'], function () {
-    Route::get('', 'Admin\OfferController@userMain')->name('user.main');
-    Route::get('about-to-start', 'Admin\OfferController@aboutToStart')->name('auction.start');
-    Route::get('user-offer-page/{id}', 'Admin\OfferController@userOfferPage')->name('user.offer');
-    Route::post('user-offer-page/{id}', 'Admin\OfferController@userOfferSubmit')->name('user.offer.submit');
+Route::get('', 'Admin\OfferController@userMain')->name('user.main');
+
+Route::namespace('Admin')->middleware(['auth'])->group(function () {
+    Route::get('about-to-start', 'OfferController@aboutToStart')->name('auction.start');
+    Route::get('user-offer-page/{id}', 'OfferController@userOfferPage')->name('user.offer');
+    Route::post('user-offer-page/{id}', 'OfferController@userOfferSubmit')->name('user.offer.submit');
 });
 
-
     //Admin sayfasına girebilmek için user status ADMIN olmalı default USER olarak üyelik başlıyor.
-Route::namespace('Admin')->group(['middleware' => ['admin', 'auth']], function () {
+Route::namespace('Admin')->middleware(['admin', 'auth'])->group(function () {
 
     Route::get('home', 'HomeController@index')->name('home');
     Route::resource('products', 'ProductController')->except('show');

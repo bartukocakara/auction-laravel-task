@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Offer;
 use App\Models\Product;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -21,7 +22,6 @@ class ProductController extends Controller
     public function __construct(Product $products)
     {
         return $this->products = $products;
-
     }
 
 
@@ -46,12 +46,39 @@ class ProductController extends Controller
     public function productOfferEnd()
     {
         $products = Product::where('ending_date', '>', date('Y-m-d H:i:s'))
+
                 ->join('offers', 'offers.product_id', '=', 'products.id')
                 ->join('users', 'users.id', '=', 'offers.user_id')
                 ->select('users.name as userName', 'users.*', 'offers.*', 'products.*')
                 ->orderBy('last_offer_time', 'DESC')
                 ->get();
         return view('admin.last-prices.ended-offer', ['products' => $products]);
+    }
+
+    public function checkUsersStatusBeforeOffering($id, $status, $product, $createOffer, $user, $offers, $maxOffer, Request $request)
+    {
+        if($status == 'YES')
+        {
+            return redirect()->back()->with(['status' => 'For offering price please wait for other offers.']);
+        }
+        else if($status == 'NO')
+        {
+            if($product->ending_date < date('Y-m-d H:i:s'))
+            {
+                return redirect()->back()->with(['status' => 'You can\'t offer new price.Because deadline is over']);
+
+            }
+            $this->giveBackToUserAfterOtherUsersOffer($id);
+            $this->decreaseUsersCredit($user->user_credit, $request->input('amount'));
+            Offer::create($createOffer);
+            $this->changeStatusAfterOtherUsersOffer($product->id);
+            $this->changeStatusAfterUsersOffer($product->id);
+            return view('front.user-offers.offer-page', ['product' => $product,
+                                                         'offers' => $offers,
+                                                         'maxOffer' => $maxOffer,
+                                                         'success' => 'Offer created successfully'
+                                                         ]);
+        }
     }
 
     /**

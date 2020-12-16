@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Restoran')
+@section('title', 'Edit')
 
 @section('navbar')
     @parent
